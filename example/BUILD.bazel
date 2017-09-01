@@ -1,0 +1,7 @@
+load("//:index.bzl", "karma_test")
+
+karma_test(
+    name = "example",
+    deps = glob(["*.js"]),
+    tags = ["local"]
+)

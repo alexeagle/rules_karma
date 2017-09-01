@@ -1,0 +1,18 @@
+{
+  "name": "rules_karma",
+  "version": "0.0.1",
+  "description": "Bazel rules for Karma",
+  "main": "index.js",
+  "author": "Alex Eagle <alexeagle@google.com>",
+  "license": "MIT",
+  "dependencies": "FIXME(alexeagle): some should be devDependencies?",
+  "dependencies": {
+    "karma": "^1.7.1",
+    "@types/jasmine": "^2.5.54",
+    "jasmine-core": "^2.8.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.1.0",
+    "karma-requirejs": "^1.1.0",
+    "requirejs": "^2.3.5"
+  }
+}
