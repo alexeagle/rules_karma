@@ -2,6 +2,8 @@ load("//:index.bzl", "karma_test")
 
 karma_test(
     name = "example",
-    deps = glob(["*.js"]),
+    deps = glob(["specs/*.js", "adders/*.js"]),
+    # deps = ["bundle.spec.js"],
+    #deps = glob(["thing*.js"]),
     tags = ["local"]
 )
