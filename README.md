@@ -11,7 +11,7 @@ Run `bazel run @yarn//:yarn` to install the hermetic `node_modules`.
 
 # Try it
 
-One-shot as a test *currently broken* :sad-panda:
+One-shot as a test:
 
 ```
 $ bazel test example
