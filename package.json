@@ -7,11 +7,14 @@
   "license": "MIT",
   "dependencies": {
     "@types/jasmine": "^2.5.54",
+    "jasmine": "^2.8.0",
     "jasmine-core": "^2.8.0",
     "karma": "^1.7.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.0",
-    "karma-requirejs": "^1.1.0",
-    "requirejs": "^2.3.5"
+    "systemjs": "^0.20.18"
+  },
+  "devDependencies": {
+    "typescript": "^2.5.2"
   }
 }

@@ -1,6 +1,6 @@
 _CONF_TMPL = "//internal:karma.conf.js"
 _RUNNER_TMPL = "//internal:run_karma.sh"
-_LOADER = "//internal:test-main.js"
+_LOADER = "//internal:loader.js"
 
 def _karma_test_impl(ctx):
   conf = ctx.actions.declare_file(

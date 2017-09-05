@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "system",
+    //"outDir": ".."
+    "outFile": "../bundle.spec.js"
+  },
+  "files": [
+    "thing.ts",
+    "thing.spec.ts"
+  ]
+}

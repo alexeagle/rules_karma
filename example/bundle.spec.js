@@ -1,31 +1,32 @@
-// The modules need to be named, not anonymous.
-// See https://github.com/Microsoft/TypeScript/pull/5090#issuecomment-326832505
-define("foo", ["require", "exports"], function (require, exports) {
+System.register("thing", [], function (exports_1, context_1) {
     "use strict";
-    exports.__esModule = true;
-    var Foo = (function () {
-        function Foo() {
+    var __moduleName = context_1 && context_1.id;
+    function add(i, i2) {
+        return i + i2;
+    }
+    exports_1("add", add);
+    return {
+        setters: [],
+        execute: function () {
         }
-        Foo.prototype.double = function (n) {
-            return n * 2;
-        };
-        return Foo;
-    }());
-    exports.Foo = Foo;
+    };
 });
-define("foo.spec", ["require", "exports", "foo"], function (require, exports, foo_1) {
+System.register("thing.spec", ["thing"], function (exports_2, context_2) {
     "use strict";
-    exports.__esModule = true;
-    describe("Foo", function () {
-        it("should double", function () {
-            expect(new foo_1.Foo().double(2)).toBe(4);
-        });
-    });
-});
-/**
- * We have to add this manual require statement, in an anonymous module, or it isn't executed.
- * Apparently require.js does not execute the function we pass to the define function if it has a first string arg?
- */
-define(["require", "foo.spec"], function(require) {
-    require("foo.spec");
+    var __moduleName = context_2 && context_2.id;
+    var thing_1;
+    return {
+        setters: [
+            function (thing_1_1) {
+                thing_1 = thing_1_1;
+            }
+        ],
+        execute: function () {
+            describe("thing", function () {
+                it("should add", function () {
+                    expect(thing_1.add(1, 2)).toBe(3);
+                });
+            });
+        }
+    };
 });

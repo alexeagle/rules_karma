@@ -1,0 +1,2 @@
+test --test_output=errors
+build --symlink_prefix=dist/

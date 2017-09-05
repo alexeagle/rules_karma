@@ -16,7 +16,7 @@ karma_test(
 )
 
 # Experiment: what do we need to do to serve a single JS file
-# with the individual AMD js files inside?
+# with the individual System modules inside?
 karma_test(
     name = "bundled",
     deps = ["bundle.spec.js"],
