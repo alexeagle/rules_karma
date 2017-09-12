@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@bazel/typescript@^0.1.0":
+"@bazel/typescript@alexeagle/rules_typescript#umd":
   version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@bazel/typescript/-/typescript-0.1.0.tgz#14a0a74d06e0acf7cf60295963adbcc5d3f41217"
+  resolved "https://codeload.github.com/alexeagle/rules_typescript/tar.gz/2d12af872299ec284f23ffc6de4af993be55e8ac"
   dependencies:
     "@types/node" "7.0.18"
     protobufjs "5.0.0"

@@ -2,12 +2,37 @@ _CONF_TMPL = "//internal:karma.conf.js"
 _RUNNER_TMPL = "//internal:run_karma.sh"
 _LOADER = "//internal:test-main.js"
 
+def _sources_aspect_impl(target, ctx):
+  result = depset()
+  if hasattr(ctx.rule.attr, "deps"):
+    for dep in ctx.rule.attr.deps:
+      if hasattr(dep, "karma_sources"):
+        result += dep.karma_sources
+  # Note layering: until we have JS interop providers, this needs to know how to
+  # get TypeScript outputs.
+  if hasattr(target, "typescript"):
+    result += target.typescript.es5_sources
+  return struct(karma_sources = result)
+
+_sources_aspect = aspect(
+    _sources_aspect_impl,
+    attr_aspects = ["deps"],
+)
+
 def _karma_test_impl(ctx):
   conf = ctx.actions.declare_file(
       "{}.conf.js".format(ctx.label.name),
       sibling=ctx.outputs.executable)
+  karma_sources = depset()
+  for d in ctx.attr.deps:
+    if hasattr(d, "karma_sources"):
+      karma_sources += d.karma_sources
+
   # Note: each file must have included: false to prevent it being loaded with a script tag, since we use Require.js
-  files = "\n".join(["{{pattern: '{}', included: false}},".format(f.path) for f in ctx.files.deps])
+  files = "\n".join([
+      "{{pattern: '{}', included: false}},".format(f.short_path)
+      for f in karma_sources
+  ])
   basePath = "/".join([".."] * len(ctx.label.package.split("/")))
   ctx.actions.expand_template(
       output = conf,
@@ -27,7 +52,7 @@ def _karma_test_impl(ctx):
       })
   return [DefaultInfo(
       runfiles = ctx.runfiles(
-          files = ctx.files._karma + ctx.files.node_modules + ctx.files.deps + [
+          files = ctx.files._karma + ctx.files.node_modules + karma_sources.to_list() + [
               conf, ctx.executable._node, ctx.file._loader,
           ],
           # TODO(alexeagle): should get node binary and node_modules this way...
@@ -40,7 +65,9 @@ def _karma_test_impl(ctx):
 karma_test = rule(
     implementation = _karma_test_impl,
     attrs = {
-        "deps": attr.label_list(allow_files = True),
+        "deps": attr.label_list(
+            aspects = [_sources_aspect],
+            allow_files = True),
         "_karma": attr.label(
             default = Label("//internal:karma_bin"),
             executable = True, cfg = "data", single_file = False, allow_files = True),
