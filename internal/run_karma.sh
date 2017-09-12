@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 readonly KARMA=TMPL_karma
 readonly CONF=TMPL_conf
