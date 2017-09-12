@@ -2,3 +2,4 @@ bazel-*
 node_modules
 example/adders/*
 example/specs/*
+dist
