@@ -7,4 +7,5 @@ exports_files(["karma.conf.js", "run_karma.sh", "test-main.js"])
 nodejs_binary(
     name = "karma_bin",
     entry_point = "karma/bin/karma",
+    data = ["//internal/karma_concat_js"],
 )

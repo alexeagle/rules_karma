@@ -28,9 +28,8 @@ def _karma_test_impl(ctx):
     if hasattr(d, "karma_sources"):
       karma_sources += d.karma_sources
 
-  # Note: each file must have included: false to prevent it being loaded with a script tag, since we use Require.js
   files = "\n".join([
-      "{{pattern: '{}', included: false}},".format(f.short_path)
+      "'{}',".format(f.short_path)
       for f in karma_sources
   ])
   basePath = "/".join([".."] * len(ctx.label.package.split("/")))
@@ -38,7 +37,7 @@ def _karma_test_impl(ctx):
       output = conf,
       template = ctx.file._conf_tmpl,
       substitutions = {
-          "TMPL_basePath": "'{}'".format(basePath),
+          "TMPL_basePath": basePath,
           "TMPL_files": files,
       })
 

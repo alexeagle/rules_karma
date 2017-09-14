@@ -10,6 +10,9 @@ load("@karma//:index.bzl", "karma_test")
 
 karma_test(
     name = "ts",
-    deps = [":ts_lib"],
+    deps = [":ts_lib",
+      # FIXME(alexeagle): doesn't belong here
+      "//internal/karma_concat_js",
+    ],
     tags = ["local"]
 )

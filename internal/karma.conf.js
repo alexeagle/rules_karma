@@ -4,13 +4,13 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: TMPL_basePath,
+    basePath: 'TMPL_basePath',
 
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'requirejs'],
-
+    frameworks: ['jasmine', 'concat_js', 'requirejs'],
+    plugins: ['karma-*', 'karma-concat-js'],
 
     // list of files / patterns to load in the browser
     files: [
