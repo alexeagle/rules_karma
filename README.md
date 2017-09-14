@@ -14,7 +14,7 @@ Run `bazel run @yarn//:yarn` to install the hermetic `node_modules`.
 One-shot as a test:
 
 ```
-$ bazel test example
+$ bazel test examples/ts
 ```
 
 Watch mode:
@@ -22,5 +22,5 @@ Watch mode:
 First install ibazel: https://github.com/bazelbuild/bazel-watcher
 
 ```
-$ ibazel run example
+$ ibazel run examples/ts
 ```
