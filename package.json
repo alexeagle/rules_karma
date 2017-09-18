@@ -15,6 +15,7 @@
     "karma-jasmine": "^1.1.0",
     "karma-requirejs": "^1.1.0",
     "requirejs": "^2.3.5",
-    "tmp": "^0.0.33"
+    "tmp": "^0.0.33",
+    "typescript": "2.4"
   }
 }
