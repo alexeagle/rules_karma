@@ -6,7 +6,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as process from 'process';
 import * as tmp from 'tmp';
-
+///<reference types="lib.dom"/>
 /**
  * Return SHA1 of data buffer.
  */

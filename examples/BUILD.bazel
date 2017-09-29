@@ -2,8 +2,11 @@ load("@karma//:index.bzl", "karma_test")
 
 karma_test(
     name = "example",
-    deps = glob(["thing*.js"]),
-    tags = ["local"]
+    deps = glob(["thing*.js"]) + [
+        # FIXME(alexeagle): doesn't belong here
+      "//internal/karma_concat_js",
+    ],
+    tags = ["local"],
 )
 
 # Experiment: how does our setup work with a large program?

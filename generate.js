@@ -46,7 +46,7 @@ function doGenerate(rootDir) {
         }
     }
     fs.writeFileSync(path.join(rootDir, "tsconfig.json"), "{\n    \"compilerOptions\": {\n      \"types\": [\"jasmine\"]\n    }\n  }", utf8);
-    fs.writeFileSync(path.join(rootDir, "BUILD.bazel"), "\nexports_files([\"tsconfig.json\"])\n\nload(\"@karma//:index.bzl\", \"karma_test\")\n\nkarma_test(\n    name = \"ts\",\n    deps = [" + deps.map(function (d) { return "\"" + d + "\""; }).join(",\n") + ",\n      # FIXME(alexeagle): doesn't belong here\n      \"//internal/karma_concat_js\",\n    ],\n    tags = [\"local\"]\n)\n", utf8);
+    fs.writeFileSync(path.join(rootDir, "BUILD.bazel"), "\nexports_files([\"tsconfig.json\"])\n\nload(\"@karma//:index.bzl\", \"karma_test\")\n\nkarma_test(\n    name = \"tests\",\n    deps = [" + deps.map(function (d) { return "\"" + d + "\""; }).join(",\n") + ",\n      # FIXME(alexeagle): doesn't belong here\n      \"//internal/karma_concat_js\",\n    ],\n    tags = [\"local\"]\n)\n", utf8);
 }
 function main(argv) {
     doGenerate('org');

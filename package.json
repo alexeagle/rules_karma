@@ -10,7 +10,7 @@
     "@types/jasmine": "^2.5.54",
     "@types/tmp": "^0.0.33",
     "jasmine-core": "^2.8.0",
-    "karma": "^1.7.1",
+    "karma": "alexeagle/karma#ibazel",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.0",
     "karma-requirejs": "^1.1.0",

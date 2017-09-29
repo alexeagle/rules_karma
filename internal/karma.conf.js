@@ -55,7 +55,10 @@ TMPL_files
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
-
+    // Tell karma to only listen for ibazel messages on stdin rather than watch all the input files
+    // This is from fork alexeagle/karma in the ibazel branch:
+    // https://github.com/alexeagle/karma/blob/576d262af50b10e63485b86aee99c5358958c4dd/lib/server.js#L172
+    watchMode: 'ibazel',
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
