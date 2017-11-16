@@ -9,8 +9,8 @@ Object.keys(window.__karma__.files).forEach(function (file) {
     // then do not normalize the paths
     var normalizedTestModule = file.replace(/^\/base\/|\.js$/g, '');
     // FIXME(alexeagle): where to get this from??
-    var workspaceName = "karma";
-    allTestFiles.push(workspaceName + '/' + normalizedTestModule)
+    var workspaceName = "__main__";
+    allTestFiles.push(normalizedTestModule);
   }
 })
 

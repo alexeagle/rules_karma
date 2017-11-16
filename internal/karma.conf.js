@@ -14,7 +14,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'internal/test-main.js',
+      '../karma/internal/test-main.js',
 // **************************************************
 // FILES LIST DYNAMICALLY POPULATED BY karma_test.bzl
 TMPL_files
