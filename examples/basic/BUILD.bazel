@@ -1,0 +1,15 @@
+load("@karma//:index.bzl", "karma_test")
+
+filegroup(
+  name = "dev_sources",
+  srcs = [
+    "index.js",
+  ],
+)
+
+karma_test(
+    name = "basic",
+    srcs = ["index.spec.js"],
+    deps = [":dev_sources"],
+    tags = ["local"],
+)

@@ -1,87 +1,72 @@
 _CONF_TMPL = "//internal:karma.conf.js"
-_RUNNER_TMPL = "//internal:run_karma.sh"
 _LOADER = "//internal:test-main.js"
-
-def _sources_aspect_impl(target, ctx):
-  result = depset()
-  if hasattr(ctx.rule.attr, "deps"):
-    for dep in ctx.rule.attr.deps:
-      if hasattr(dep, "karma_sources"):
-        result += dep.karma_sources
-  # Note layering: until we have JS interop providers, this needs to know how to
-  # get TypeScript outputs.
-  if hasattr(target, "typescript"):
-    result += target.typescript.es5_sources
-  return struct(karma_sources = result)
-
-_sources_aspect = aspect(
-    _sources_aspect_impl,
-    attr_aspects = ["deps"],
-)
 
 def _karma_test_impl(ctx):
   conf = ctx.actions.declare_file(
-      "{}.conf.js".format(ctx.label.name),
+      "%s.conf.js" % ctx.label.name,
       sibling=ctx.outputs.executable)
-  karma_sources = depset()
-  for d in ctx.attr.deps:
-    if hasattr(d, "karma_sources"):
-      karma_sources += d.karma_sources
 
   files = "\n".join([
       "'{}',".format(f.short_path)
-      for f in karma_sources
+      for f in ctx.files.srcs + ctx.files.deps
   ])
+
   basePath = "/".join([".."] * len(ctx.label.package.split("/")))
   ctx.actions.expand_template(
       output = conf,
-      template = ctx.file._conf_tmpl,
+      template =  ctx.file._conf_tmpl,
       substitutions = {
           "TMPL_basePath": basePath,
           "TMPL_files": files,
+          "TMPL_manifest_path": ctx.file.manifest.short_path if ctx.file.manifest else "",
+          "TMPL_concatjs": "true" if ctx.attr.concatjs else "false",
+          "TMPL_workspace_name": ctx.workspace_name,
       })
 
-  ctx.actions.expand_template(
+  ctx.actions.write(
       output = ctx.outputs.executable,
-      template = ctx.file._runner_tmpl,
       is_executable = True,
-      substitutions = {
-          "TMPL_karma": ctx.executable._karma.short_path,
-          "TMPL_conf": conf.short_path,
-      })
+      content = """#!/usr/bin/env bash
+readonly KARMA={TMPL_karma}
+readonly CONF={TMPL_conf}
+export HOME=$(mktemp -d)
+ARGV=( "start" $CONF )
+
+# Detect that we are running as a test, by using a well-known environment
+# variable. See go/test-encyclopedia
+if [ ! -z "$TEST_TMPDIR" ]; then
+  ARGV+=( "--single-run" )
+fi
+
+$KARMA ${{ARGV[@]}}
+""".format(TMPL_karma = ctx.executable._karma.short_path,
+           TMPL_conf = conf.short_path))
   return [DefaultInfo(
       runfiles = ctx.runfiles(
-          files = ctx.files._karma + ctx.files.node_modules + karma_sources.to_list() + [
-              conf, ctx.executable._node, ctx.file._loader,
-          ],
-          # TODO(alexeagle): should get node binary and node_modules this way...
-          # transitive_files = transitive_runfiles,
+          files = ctx.files.srcs + ctx.files.deps + [
+              conf,
+              ctx.file._loader,
+          ] + ([ctx.file.manifest] if ctx.file.manifest else []),
           collect_data = True,
-          collect_default = True,
       ),
   )]
 
 karma_test = rule(
     implementation = _karma_test_impl,
     attrs = {
-        "deps": attr.label_list(
-            aspects = [_sources_aspect],
-            allow_files = True),
+        "srcs": attr.label_list(allow_files = ["js"]),
+        "deps": attr.label_list(allow_files = True),
+        "data": attr.label_list(cfg = "data"),
+        "concatjs": attr.bool(),
+        "manifest": attr.label(allow_files = True, single_file = True),
         "_karma": attr.label(
             default = Label("//internal:karma_bin"),
-            executable = True, cfg = "data", single_file = False, allow_files = True),
-        # TODO(alexeagle): _node and node_modules should have been found in the transitive runfiles...
-        "_node": attr.label(
-            default = Label("@nodejs//:bin/node"),
-            executable = True, single_file = True, cfg = "data", allow_files = True),
-        "node_modules": attr.label(
-            default = Label("@//:node_modules")),
-        # END-TODO
+            executable = True,
+            cfg = "data",
+            single_file = False,
+            allow_files = True),
         "_conf_tmpl": attr.label(
             default = Label(_CONF_TMPL),
-            allow_files = True, single_file = True),
-        "_runner_tmpl": attr.label(
-            default = Label(_RUNNER_TMPL),
             allow_files = True, single_file = True),
         "_loader": attr.label(
             default = Label(_LOADER),
@@ -89,3 +74,17 @@ karma_test = rule(
     },
     test = True,
 )
+
+def karma_test_macro(concatjs = False, manifest = None, tags = [], data = [], **kwargs):
+  if (manifest):
+    concatjs = True
+    data = data + [manifest]
+
+  karma_test(
+      tags = tags + ["iblaze_notify_changes"],
+      # Our binary dependency must be in data[] for collect_data to pick it up
+      # FIXME: maybe we can just ask the attr._karma for its runfiles attr
+      data = data + ["//internal:karma_bin"],
+      concatjs = concatjs,
+      manifest = manifest,
+      **kwargs)

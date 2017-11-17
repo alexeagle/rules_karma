@@ -6,7 +6,7 @@
   "author": "Alex Eagle <alexeagle@google.com>",
   "license": "MIT",
   "dependencies": {
-    "@bazel/typescript": "alexeagle/rules_typescript#umd",
+    "@bazel/typescript": "0.3.x",
     "@types/jasmine": "^2.5.54",
     "@types/tmp": "^0.0.33",
     "jasmine-core": "^2.8.0",
@@ -16,6 +16,6 @@
     "karma-requirejs": "^1.1.0",
     "requirejs": "^2.3.5",
     "tmp": "^0.0.33",
-    "typescript": "2.4"
+    "typescript": "2.5.x"
   }
 }

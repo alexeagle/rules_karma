@@ -1,0 +1,14 @@
+load("@karma//:index.bzl", "karma_test")
+
+filegroup(
+  name = "dev_sources",
+  srcs = ["thing.js"],
+)
+
+karma_test(
+    name = "amd",
+    srcs = ["thing.spec.js"],
+    deps = ["dev_sources"],
+    # Since we use named AMD modules we can use the super-fast bundler
+    concatjs = True,
+)

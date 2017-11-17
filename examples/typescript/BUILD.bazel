@@ -1,0 +1,29 @@
+load("@build_bazel_rules_typescript//:defs.bzl", "ts_library")
+load("@build_bazel_rules_nodejs//internal:devmode_js_sources.bzl", "devmode_js_sources")
+load("@karma//:index.bzl", "karma_test")
+
+ts_library(
+    name = "lib",
+    srcs = ["decrement.ts"],
+)
+
+ts_library(
+    name = "tests",
+    srcs = ["decrement.spec.ts"],
+    deps = [":lib"],
+    testonly = 1,
+)
+
+devmode_js_sources(
+    name = "test_sources",
+    deps = [
+      ":lib",
+      ":tests",
+    ],
+    testonly = 1,
+)
+
+karma_test(
+    name = "typescript",
+    manifest = ":test_sources",
+)

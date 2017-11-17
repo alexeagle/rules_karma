@@ -8,5 +8,4 @@ nodejs_binary(
     name = "karma_bin",
     entry_point = "karma/bin/karma",
     data = ["//internal/karma_concat_js"],
-    args = ["--node_options=--prof"]
 )
